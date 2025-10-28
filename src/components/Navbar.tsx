@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -46,12 +50,22 @@ export default function Navbar() {
             <span className="navbar-bar" />
           </button>
 
-          {open && (
+          {open ? (
             <div ref={menuRef} role="menu" aria-label="Main menu" className="navbar-menu">
-              <button role="menuitem" onClick={() => goto("/customers")}>Customers</button>
-              <button role="menuitem" onClick={() => goto("/trainings")}>Trainings</button>
+              <List component="nav" aria-label="main navigation">
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => goto("/customers")}>
+                    <ListItemText primary="Customers" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => goto("/trainings")}>
+                    <ListItemText primary="Trainings" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
