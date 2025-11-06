@@ -35,12 +35,12 @@ export default function Trainings() {
     }, [trainings]);
 
     const columns: GridColDef[] = [
-        { field: "id", headerName: "ID", width: 120 },
-        { field: "activity", headerName: "Activity", width: 180, sortable: true },
+        { field: "id", headerName: "ID", flex: 1 },
+        { field: "activity", headerName: "Activity", flex: 1, sortable: true },
         {
             field: "dateRaw",
             headerName: "Date",
-            width: 200,
+            flex: 1,
             sortable: true,
             renderCell: (params: any) => {
                 const raw = params?.row?.dateRaw ?? params?.value;
@@ -52,8 +52,8 @@ export default function Trainings() {
                 }
             },
         },
-        { field: "duration", headerName: "Duration", width: 120, sortable: true },
-        { field: "customerName", headerName: "Customer", width: 220, sortable: true },
+        { field: "duration", headerName: "Duration", flex: 1, sortable: true },
+        { field: "customerName", headerName: "Customer", flex: 1, sortable: true },
     ];
 
     const filtered = useMemo(() => {
@@ -71,26 +71,26 @@ export default function Trainings() {
         });
     }, [rows, query]);
 
-    return (
-        <div>
-            <div style={{ margin: "0.5rem 0" }}>
-                <input
-                    aria-label="Search trainings"
-                    placeholder="Search by activity, customer, date"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    style={{ padding: "0.5rem", width: "100%", maxWidth: 420 }}
-                />
-            </div>
+        return (
+            <div className="page-container">
+                <div className="search">
+                    <input
+                        className="search-input"
+                        aria-label="Search trainings"
+                        placeholder="Search by activity, customer, date"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                </div>
 
-            <div style={{ height: 520, width: "100%" }}>
-                <DataGrid
-                    rows={filtered}
-                    columns={columns}
-                    pageSizeOptions={[5, 10, 25]}
-                    initialState={{ pagination: { paginationModel: { pageSize: 10, page: 0 } } }}
-                />
+                <div className="grid-large">
+                    <DataGrid
+                        rows={filtered}
+                        columns={columns}
+                        pageSizeOptions={[5, 10, 25]}
+                        initialState={{ pagination: { paginationModel: { pageSize: 10, page: 0 } } }}
+                    />
+                </div>
             </div>
-        </div>
-    );
+        );
 }

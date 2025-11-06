@@ -17,10 +17,10 @@ export default function Customers() {
     }, []);
 
     const columns: GridColDef[] = [
-        { field: "id", headerName: "ID", width: 120 },
-        { field: "firstname", headerName: "First name", width: 150, sortable: true },
-        { field: "lastname", headerName: "Last name", width: 150, sortable: true },
-        { field: "email", headerName: "Email", width: 220, sortable: true },
+        { field: "id", headerName: "ID", flex: 1 },
+        { field: "firstname", headerName: "First name", flex: 1 },
+        { field: "lastname", headerName: "Last name", flex: 1 },
+        { field: "email", headerName: "Email", flex: 1 },
     ];
 
     const rows = useMemo(
@@ -40,30 +40,30 @@ export default function Customers() {
         return rows.filter((r) => (r.firstname + " " + r.lastname + " " + r.email + " " + r.id).toLowerCase().includes(q));
     }, [rows, query]);
 
-    return (
-        <div>
-            <div style={{ margin: "0.5rem 0" }}>
-                <input
-                    aria-label="Search customers"
-                    placeholder="Search by name, email or id"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    style={{ padding: "0.5rem", width: "100%", maxWidth: 420 }}
-                />
-            </div>
+        return (
+            <div className="page-container">
+                <div className="search">
+                    <input
+                        className="search-input"
+                        aria-label="Search customers"
+                        placeholder="Search by name, email or id"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                </div>
 
-            <div style={{ height: 480, width: "100%" }}>
-                <DataGrid
-                    rows={filtered}
-                    columns={columns}
-                    pageSizeOptions={[5, 10, 25]}
-                    initialState={{
-                        pagination: {
-                            paginationModel: { pageSize: 5, page: 0 },
-                        },
-                    }}
-                />
+                <div className="grid-small">
+                    <DataGrid
+                        rows={filtered}
+                        columns={columns}
+                        pageSizeOptions={[5, 10, 25]}
+                        initialState={{
+                            pagination: {
+                                paginationModel: { pageSize: 5, page: 0 },
+                            },
+                        }}
+                    />
+                </div>
             </div>
-        </div>
-    );
+        );
 }

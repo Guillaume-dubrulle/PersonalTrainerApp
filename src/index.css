@@ -30,6 +30,18 @@ body {
   min-height: 100vh;
 }
 
+.search {
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 420px;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -65,4 +77,38 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+body {
+  margin: 0;
+  display: block; /* reset flex that breaks centering */
+  min-height: 100vh;
+}
+
+/* Make sure content is centered under fixed navbar */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* center horizontally */
+  justify-content: center;  /* center vertically */
+  min-height: calc(100vh - 60px); /* minus navbar height */
+  padding-top: 60px;        /* prevent overlap with navbar */
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Center DataGrid tables */
+.grid-small,
+.grid-large {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.grid-small > div,
+.grid-large > div {
+  width: 100%;
 }
