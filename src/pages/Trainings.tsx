@@ -2,37 +2,39 @@ import { useEffect, useMemo, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { parseISO, format } from "date-fns";
+import type { TrainingType, CustomerType } from "../Type";
 
 export default function Trainings() {
-    const [trainings, setTrainings] = useState<any[]>([]);
     const [rows, setRows] = useState<any[]>([]);
     const [query, setQuery] = useState("");
 
     useEffect(() => {
-        const fetchTrainings = async () => {
+        const fetchAndBuildRows = async () => {
             try {
                 const res = await fetch(import.meta.env.VITE_API_BASE_URL + "gettrainings");
                 const data = await res.json();
-                setTrainings(Array.isArray(data) ? data : data._embedded?.trainings ?? []);
+                const trainingsArray = (Array.isArray(data) ? data : data._embedded?.trainings ?? []) as TrainingType[];
+
+                const base = trainingsArray.map((t: TrainingType, idx: number) => {
+                    const customer = (t as unknown as { customer?: CustomerType }).customer;
+                    return {
+                        _raw: t,
+                        id: t._links?.self?.href ?? idx,
+                        activity: t.activity ?? "",
+                        dateRaw: t.date ?? "",
+                        duration: t.duration ?? "",
+                        customerName: customer ? `${customer.firstname} ${customer.lastname}`.trim() : "",
+                    };
+                });
+
+                setRows(base);
             } catch (e) {
-                setTrainings([]);
+                setRows([]);
             }
         };
-        void fetchTrainings();
+
+        void fetchAndBuildRows();
     }, []);
-
-    useEffect(() => {
-        const base = trainings.map((t: any, idx: number) => ({
-            _raw: t,
-            id: t.id ?? t._links?.self?.href ?? idx,
-            activity: t.activity ?? t.activityType ?? "",
-            dateRaw: t.date ?? t.datetime ?? t.timestamp ?? "",
-            duration: t.duration ?? t.length ?? t.minutes ?? "",
-            customerName: t.customer ? `${t.customer.firstname ?? ""} ${t.customer.lastname ?? ""}`.trim() : "",
-        }));
-
-        setRows(base);
-    }, [trainings]);
 
     const columns: GridColDef[] = [
         { field: "id", headerName: "ID", flex: 1 },
