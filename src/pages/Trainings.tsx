@@ -2,71 +2,38 @@ import { useEffect, useMemo, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { parseISO, format } from "date-fns";
-import type { TrainingType } from "../Type";
+import type { TrainingType, CustomerType } from "../Type";
 
 export default function Trainings() {
-    const [trainings, setTrainings] = useState<TrainingType[]>([]);
     const [rows, setRows] = useState<any[]>([]);
     const [query, setQuery] = useState("");
-    const [customerNames, setCustomerNames] = useState();
-    
+
     useEffect(() => {
-        const fetchTrainings = async () => {
+        const fetchAndBuildRows = async () => {
             try {
                 const res = await fetch(import.meta.env.VITE_API_BASE_URL + "gettrainings");
                 const data = await res.json();
-                setTrainings(Array.isArray(data) ? data : data._embedded?.trainings ?? []);
+                const trainingsArray = (Array.isArray(data) ? data : data._embedded?.trainings ?? []) as TrainingType[];
+
+                const base = trainingsArray.map((t: TrainingType, idx: number) => {
+                    const customer = (t as unknown as { customer?: CustomerType }).customer;
+                    return {
+                        _raw: t,
+                        id: t._links?.self?.href ?? idx,
+                        activity: t.activity ?? "",
+                        dateRaw: t.date ?? "",
+                        duration: t.duration ?? "",
+                        customerName: customer ? `${customer.firstname} ${customer.lastname}`.trim() : "",
+                    };
+                });
+
+                setRows(base);
             } catch (e) {
-                setTrainings([]);
+                setRows([]);
             }
         };
-        void fetchTrainings();
-    }, []);
 
-    useEffect(() => {
-        const fetchAll = async () => {
-            const res = await fetch(import.meta.env.VITE_API_BASE_URL + "trainings");
-            const data = await res.json();
-            const trainingsArray = data._embedded?.trainings ?? [];
-
-            const urls = Array.from(
-            new Set(
-                trainingsArray
-                .map((t: any) => t._links?.customer?.href)
-                .filter(Boolean) as string[]
-            )
-            );
-
-            const customerMap = new Map<string, string>();
-            await Promise.all(
-            urls.map(async (url) => {
-                try {
-                const r = await fetch(url);
-                if (!r.ok) return;
-                const c = await r.json();
-                const name = `${c.firstname ?? ""} ${c.lastname ?? ""}`.trim();
-                customerMap.set(url, name);
-                } catch (e) {
-                customerMap.set(url, "");
-                }
-            })
-            );
-
-            const rows = trainingsArray.map((t: any) => {
-            const customerUrl = t._links?.customer?.href;
-            return {
-                id: t._links?.self?.href?.split("api/trainings/")[1] ?? "",
-                activity: t.activity,
-                dateRaw: t.date,
-                duration: t.duration,
-                customerName: customerUrl ? (customerMap.get(customerUrl) ?? "") : "",
-                _raw: t,
-            };
-            });
-        setRows(rows);
-    };
-
-    void fetchAll();
+        void fetchAndBuildRows();
     }, []);
 
     const columns: GridColDef[] = [
