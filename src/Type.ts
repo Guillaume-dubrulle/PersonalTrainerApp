@@ -20,17 +20,18 @@ export type CustomerType = {
 };
 
 export type TrainingType = {
-    date: string;
-    duration: number;
-    activity: string;
-    _links: {
-        self: {
+    date?: string;
+    duration?: number;
+    activity?: string;
+    customer?: CustomerType;
+    _links?: {
+        self?: {
             href: string;
         },
-        trainings: {
+        trainings?: {
             href: string;
         },
-        customer: {
+        customer?: {
             href: string;
         };
     };

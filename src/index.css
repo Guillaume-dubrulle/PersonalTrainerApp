@@ -34,6 +34,9 @@ body {
   margin: 0.5rem 0;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .search-input {
@@ -81,23 +84,21 @@ button:focus-visible {
 
 body {
   margin: 0;
-  display: block; /* reset flex that breaks centering */
+  display: block;
   min-height: 100vh;
 }
 
-/* Make sure content is centered under fixed navbar */
 .page-container {
   display: flex;
   flex-direction: column;
-  align-items: center;      /* center horizontally */
-  justify-content: center;  /* center vertically */
-  min-height: calc(100vh - 60px); /* minus navbar height */
-  padding-top: 60px;        /* prevent overlap with navbar */
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  padding-top: 60px;
   text-align: center;
   box-sizing: border-box;
 }
 
-/* Center DataGrid tables */
 .grid-small,
 .grid-large {
   display: flex;
