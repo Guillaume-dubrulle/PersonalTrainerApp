@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Calendar as BigCalendar, dateFnsLocalizer, Views } from "react-big-calendar";
+import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
-import { Stack, Box, Card, CardContent, Typography } from "@mui/material";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import type { TrainingType, CustomerType } from "../Type";
 
