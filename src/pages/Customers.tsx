@@ -136,6 +136,56 @@ export default function Customers() {
         setDeleteId(null);
     };
 
+    const handleExportCSV = () => {
+        const exportData = customers.map((c) => ({
+            "First Name": c.firstname,
+            "Last Name": c.lastname,
+            Email: c.email,
+            Phone: c.phone,
+            "Street Address": c.streetaddress,
+            Postcode: c.postcode,
+            City: c.city,
+        }));
+
+        const headers = [
+            "First Name",
+            "Last Name",
+            "Email",
+            "Phone",
+            "Street Address",
+            "Postcode",
+            "City",
+        ];
+
+        const csvContent = [
+            headers.join(","),
+            ...exportData.map((row) =>
+                headers
+                    .map((header) => {
+                        const value = row[header as keyof typeof row] || "";
+                        const escapedValue =
+                            typeof value === "string" && value.includes(",")
+                                ? `"${value.replace(/"/g, '""')}"`
+                                : value;
+                        return escapedValue;
+                    })
+                    .join(",")
+            ),
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+
+        link.setAttribute("href", url);
+        link.setAttribute("download", `customers_${new Date().toISOString().split("T")[0]}.csv`);
+        link.style.visibility = "hidden";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     const columns: GridColDef[] = [
         { field: "id", headerName: "ID", flex: 0.5 },
         { field: "firstname", headerName: "First name", flex: 1 },
@@ -197,6 +247,9 @@ export default function Customers() {
                 />
                 <Button variant="contained" onClick={handleAddClick} sx={{ ml: 1 }}>
                     Add Customer
+                </Button>
+                <Button variant="outlined" onClick={handleExportCSV} sx={{ ml: 1 }}>
+                    Export CSV
                 </Button>
             </div>
 
