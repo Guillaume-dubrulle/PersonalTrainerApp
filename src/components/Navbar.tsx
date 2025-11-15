@@ -63,6 +63,11 @@ export default function Navbar() {
                     <ListItemText primary="Trainings" />
                   </ListItemButton>
                 </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => goto("/calendar")}>
+                    <ListItemText primary="Calendar" />
+                  </ListItemButton>
+                </ListItem>
               </List>
             </div>
           ) : null}
