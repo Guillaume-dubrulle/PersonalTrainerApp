@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Customers from "./pages/Customers";
 import Trainings from "./pages/Trainings";
+import Calendar from "./pages/Calendar";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Navigate to="/customers" />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/trainings" element={<Trainings />} />
+        <Route path="/calendar" element={<Calendar />} />
         </Routes>
       </div>
     </BrowserRouter>
