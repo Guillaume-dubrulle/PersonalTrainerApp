@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Customers from "./pages/Customers";
 import Trainings from "./pages/Trainings";
 import Calendar from "./pages/Calendar";
+import Statistics from "./pages/Statistics";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/customers" element={<Customers />} />
         <Route path="/trainings" element={<Trainings />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/statistics" element={<Statistics />} />
         </Routes>
       </div>
     </BrowserRouter>
